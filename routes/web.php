@@ -44,6 +44,10 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('/productos', ProductosController::class,);
+
+    Route::post('/productos', [ProductosController::class, 'store'])->name('productos.store');
+    Route::put('/productos/{id}', [ProductosController::class, 'update'])->name('productos.update');
+
  
 
 

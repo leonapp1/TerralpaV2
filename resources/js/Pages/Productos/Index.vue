@@ -113,8 +113,8 @@
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300" />
                     </div>
                     <div class="mb-4">
-                        <label for="img" class="block mb-2 text-sm font-medium text-gray-700">Imagen URL</label>
-                        <input v-model="form.img" id="img" type="text"
+                        <label for="img" class="block mb-2 text-sm font-medium text-gray-700">Imagen</label>
+                        <input id="img" type="file" accept="image/*" @change="handleFileChange"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300" />
                     </div>
                     <div class="flex justify-end">
