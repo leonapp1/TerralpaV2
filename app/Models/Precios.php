@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Precios extends Model
 {
     use HasFactory;
+    protected $fillable = ['producto_id','precio','lugar_id'];
 
     public function producto()
     {
@@ -16,6 +17,13 @@ class Precios extends Model
 
     public function lugares()
     {
-        return $this->belongsToMany(Lugares::class);
+        return $this->hasMany(Lugares::class,'id');
     }
+    public function precios()
+    {
+        return $this->hasMany(Precios::class);
+    }
+
+
+   
 }

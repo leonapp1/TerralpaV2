@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/lugares', [LugaresController::class, 'store'])->name('lugares.store');
     Route::post('/lugares/{id}', [LugaresController::class, 'update'])->name('lugares.update');
 
-    Route::resource('/precios', PreciosController::class,);
+    Route::resource('precios', PreciosController::class,);
 
 
 

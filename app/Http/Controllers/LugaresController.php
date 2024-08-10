@@ -77,7 +77,6 @@ class LugaresController extends Controller
         $request->validate([
             'descripcion' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $lugar = Lugares::findOrFail($id);

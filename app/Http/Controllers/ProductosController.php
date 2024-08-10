@@ -48,7 +48,7 @@ class ProductosController extends Controller
         if ($request->hasFile('img')) {
             $image = $request->file('img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/images', $imageName);
+            $imagePath = $image->storeAs('images', $imageName, 'public');
             $data['img'] = "storage/".$imagePath;
         }
 
@@ -78,43 +78,51 @@ class ProductosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
             'codigo' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'Unid' => 'required|string',
             'peso' => 'required|numeric',
             'cantidad' => 'required|integer',
-            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+          
         ]);
-
+    
+        // Buscar el producto por ID
         $producto = Productos::findOrFail($id);
-
+    
+        // Verificar si se ha proporcionado una nueva imagen
         if ($request->hasFile('img')) {
             // Eliminar la imagen antigua si existe
             if ($producto->img) {
-                Storage::disk('public')->delete($producto->img);
+                Storage::disk('public')->delete(str_replace('storage/', '', $producto->img));
             }
-
+    
+            // Almacenar la nueva imagen
             $image = $request->file('img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('images', $imageName, 'public');
-            $data['img'] = "storage/".$imagePath;
+            $validatedData['img'] = "storage/" . $imagePath;
         }
-
-        $producto->update($data);
-
-        return redirect()->route('productos.index')->with('message', 'Producto Actualizado con éxito');
+    
+        // Actualizar el producto con los datos validados (sin cambiar la imagen si no se proporcionó)
+        $producto->update($validatedData);
+    
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('productos.index')->with('message', 'Producto actualizado con éxito');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-
         $productos = Productos::findOrFail($id);
         $productos->delete();
 
         return redirect()->route('productos.index')->with('message', 'Producto eliminado con éxito');
     }
+
+    
 }

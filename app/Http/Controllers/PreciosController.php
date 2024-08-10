@@ -15,15 +15,10 @@ class PreciosController extends Controller
      */
     public function index()
     {
-        $precios = Productos::with(['precios','lugares'])->get();
-
-        $productos = Productos::with('lugares')->get(); // Asegúrate de cargar la relación 'lugares'
-        $lugares = Lugares::all(); // Obtener todos los lugares
-
+        $precio = Precios::with('producto')->get();
+             
         return Inertia::render('Precios/Index', [
-            'productos' => $productos,
-            'lugares' => $lugares,
-            'precios' => $precios,
+            'precios' => $precio,
         ]);
 
     }
@@ -47,9 +42,14 @@ class PreciosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Precios $precios)
+    public function show(Precios $precios,$id)
     {
-        //
+        $precio = Precios::with('producto')-> where('lugar_id', $id)->get();
+        $productos=Productos::all();
+        return Inertia::render('Precios/Index', [
+            'precios' => $precio,
+            'productos' => $productos,
+        ]);
     }
 
     /**
@@ -74,5 +74,36 @@ class PreciosController extends Controller
     public function destroy(Precios $precios)
     {
         //
+    }
+
+    public function updateMassive(Request $request)
+    {
+        // Validar los datos del request
+        $request->validate([
+            'precios.*' => 'nullable|numeric|min:0', // Validar que cada precio sea un número positivo o nulo
+        ]);
+
+        // Iterar sobre los precios enviados y actualizar o crear registros
+        foreach ($request->input('precios') as $key => $precio) {
+            [$producto_id, $lugar_id] = explode('-', $key);
+
+            // Buscar el registro existente o crear uno nuevo
+            $existingPrecio = Precios::where('producto_id', $producto_id)
+                                     ->where('lugar_id', $lugar_id)
+                                     ->first();
+
+            if ($existingPrecio) {
+                $existingPrecio->update(['precio' => $precio]);
+            } else {
+                Precios::create([
+                    'producto_id' => $producto_id,
+                    'lugar_id' => $lugar_id,
+                    'precio' => $precio,
+                ]);
+            }
+        }
+
+        // Redirigir con un mensaje de éxito
+        return redirect()->route('precios.index')->with('message', 'Precios actualizados con éxito.');
     }
 }
