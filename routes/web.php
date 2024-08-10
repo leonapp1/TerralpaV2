@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LugaresController;
+use App\Http\Controllers\PreciosController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -44,11 +46,14 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('/productos', ProductosController::class,);
-
     Route::post('/productos', [ProductosController::class, 'store'])->name('productos.store');
-    Route::put('/productos/{id}', [ProductosController::class, 'update'])->name('productos.update');
+    Route::post('/productos/{id}', [ProductosController::class, 'update'])->name('productos.update');
 
- 
+    Route::resource('lugares', LugaresController::class,);
+    Route::post('/lugares', [LugaresController::class, 'store'])->name('lugares.store');
+    Route::post('/lugares/{id}', [LugaresController::class, 'update'])->name('lugares.update');
+
+    Route::resource('/precios', PreciosController::class,);
 
 
 

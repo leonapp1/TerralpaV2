@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Lugares extends Model
 {
     use HasFactory;
+    protected $fillable = ['descripcion','img','direccion'];
+    public function precios()
+    {
+        return $this->hasMany(Precios::class)->withPivot('precio');;
+    }
 }

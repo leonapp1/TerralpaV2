@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('observaciones', function (Blueprint $table) {
-            $table->id(); // Columna 'id_cliente' como clave primaria
-            $table->string('nombre'); // Columna 'nombre' de tipo string
-            $table->string('telefono'); // Columna 'telefono' de tipo string
+        Schema::create('precios', function (Blueprint $table) {
+            $table->id();
+            $table->decimal('precio', 10, 2); // Columna 'precio' de tipo decimal con 10 dígitos en total y 2 decimales
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
+
+            $table->foreignId('lugar_id')->constrained('lugares')->onDelete('cascade');
             $table->timestamps(); // Crea las columnas 'created_at' y 'updated_at'
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('observaciones');
+        //
     }
 };

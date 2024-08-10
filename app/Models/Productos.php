@@ -16,4 +16,14 @@ class Productos extends Model
         'cantidad',
         'img'
     ];
+
+    public function precios()
+    {
+        return $this->hasMany(Precios::class,'producto_id');
+    }
+
+    public function lugares()
+    {
+        return $this->hasMany(Precios::class,'producto_id');
+    }
 }

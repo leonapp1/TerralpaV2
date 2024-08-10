@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lugares;
 use App\Models\Precios;
+use App\Models\Productos;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PreciosController extends Controller
 {
@@ -12,7 +15,17 @@ class PreciosController extends Controller
      */
     public function index()
     {
-        //
+        $precios = Productos::with(['precios','lugares'])->get();
+
+        $productos = Productos::with('lugares')->get(); // Asegúrate de cargar la relación 'lugares'
+        $lugares = Lugares::all(); // Obtener todos los lugares
+
+        return Inertia::render('Precios/Index', [
+            'productos' => $productos,
+            'lugares' => $lugares,
+            'precios' => $precios,
+        ]);
+
     }
 
     /**
