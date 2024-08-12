@@ -36,7 +36,15 @@ class PreciosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'lugar_id' => 'required',
+            'producto_id' => 'required',
+            'precio' => 'required|numeric|min:0',
+        ]);
+
+        Precios::create($request->all());
+
+        return redirect()->route('precios.show',$request->lugar_id)->with('message', 'Precios Guardado con exito');
     }
 
     /**
@@ -49,6 +57,7 @@ class PreciosController extends Controller
         return Inertia::render('Precios/Index', [
             'precios' => $precio,
             'productos' => $productos,
+            'lugar_id' => $id
         ]);
     }
 

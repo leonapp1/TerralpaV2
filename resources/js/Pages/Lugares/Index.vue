@@ -47,8 +47,12 @@
                                             class="object-cover w-24 h-24" />
                                     </td>
                                     <td class="px-4 py-2">
+                                        <a :href="'precios/'+lugar.id"
+                                            class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</a>
+
                                         <button @click="openModalform(2, lugar)"
                                             class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</button>
+
                                         <button @click="delet(lugar.id)"
                                             class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Eliminar</button>
                                     </td>

@@ -103,14 +103,15 @@ import * as XLSX from 'xlsx';
 
 const props = defineProps({
     precios: Array,
-productos: Array 
+    productos: Array ,
+    lugar_id: Number
 });
 console.log(props.productos)
 const form = useForm({
     id: '',
     producto_id: '',
     precio: '',
-    lugar_id: ''
+    lugar_id: props.lugar_id // Asignar el valor de lugar_id
 });
 
 const showmodalform = ref(false);
