@@ -46,9 +46,9 @@
                                         <img v-if="lugar.img" :src="lugar.img" alt="Imagen del lugar"
                                             class="object-cover w-24 h-24" />
                                     </td>
-                                    <td class="px-4 py-2">
+                                    <td class="px-4 py-2 flex gap-2">
                                         <a :href="'precios/'+lugar.id"
-                                            class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</a>
+                                            class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Precios</a>
 
                                         <button @click="openModalform(2, lugar)"
                                             class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</button>

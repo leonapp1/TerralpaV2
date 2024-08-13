@@ -1,17 +1,18 @@
 <template>
-    <Head title="Precios" />
+    <Head title="Clientes" />
     <AuthenticatedLayout>
+
         <div class="w-full px-4">
             <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white rounded shadow-lg xl:mb-0">
                 <div class="inline-flex w-full mb-4 overflow-hidden bg-white rounded-lg shadow-md" :class="clasMsj">
                     <div class="flex items-center justify-center w-12 bg-green-500">
-                        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                             <path
-                                d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z">
+                                d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666">
                             </path>
                         </svg>
                     </div>
+
                     <div class="px-4 py-2 -mx-3">
                         <div class="mx-3">
                             <span class="font-semibold text-blue-500">{{ msj }}</span>
@@ -19,6 +20,7 @@
                     </div>
                 </div>
                 <div class="flex-auto p-4">
+
                     <div class="min-w-full p-4 bg-white rounded-lg shadow-xs">
                         <button @click="openModalform(1)"
                             class="px-4 py-2 mb-4 text-white bg-indigo-600 rounded hover:bg-indigo-700">Agregar</button>
@@ -30,21 +32,22 @@
                         <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-md">
                             <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-gray-500">Producto</th>
-                                    <th class="px-4 py-2 text-left text-gray-500">Precio</th>
-                               
+                                    <th class="px-4 py-2 text-left text-gray-500">DNI</th>
+                                    <th class="px-4 py-2 text-left text-gray-500">Nombre</th>
+                                    <th class="px-4 py-2 text-left text-gray-500">Teléfono</th>
                                     <th class="px-4 py-2 text-left text-gray-500">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(precio, index) in paginatedPrecios" :key="precio.id">
-                                    <td class="px-4 py-2">{{ precio.producto.descripcion }}</td>
-                                    <td class="px-4 py-2">{{ precio.precio }}</td>
-                                   
+                                <tr v-for="(cliente, index) in paginatedClientes" :key="cliente.id">
+                                    <td class="px-4 py-2">{{ cliente.Dni }}</td>
+                                    <td class="px-4 py-2">{{ cliente.Nombre }}</td>
+                                    <td class="px-4 py-2">{{ cliente.telefono }}</td>
                                     <td class="px-4 py-2 flex gap-2">
-                                        <button @click="openModalform(2, precio)"
+                                        <button @click="openModalform(2, cliente)"
                                             class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</button>
-                                        <button @click="delet(precio.id)"
+
+                                        <button @click="delet(cliente.id)"
                                             class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Eliminar</button>
                                     </td>
                                 </tr>
@@ -61,6 +64,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Modal -->
         <div v-if="showmodalform" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="w-full max-w-3xl p-6 bg-white rounded-lg shadow-lg">
@@ -70,21 +74,20 @@
                 </div>
                 <form @submit.prevent="save">
                     <div class="mb-4">
-                        <label for="producto_id" class="block mb-2 text-sm font-medium text-gray-700">Producto</label>
-                        <select v-model="form.producto_id" id="producto_id"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300">
-                            <option v-for="producto in productos" :key="producto.id" :value="producto.id">
-                                {{ producto.descripcion }}
-                            </option>
-                        </select>
+                        <label for="Dni" class="block mb-2 text-sm font-medium text-gray-700">DNI</label>
+                        <input v-model="form.Dni" id="Dni" type="number"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300" />
                     </div>
                     <div class="mb-4">
-                        <label for="precio" class="block mb-2 text-sm font-medium text-gray-700">Precio</label>
-                        <input v-model="form.precio" id="precio" type="text"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                            required />
+                        <label for="Nombre" class="block mb-2 text-sm font-medium text-gray-700">Nombre</label>
+                        <textarea v-model="form.Nombre" id="Nombre"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300"></textarea>
                     </div>
-                   
+                    <div class="mb-4">
+                        <label for="telefono" class="block mb-2 text-sm font-medium text-gray-700">Teléfono</label>
+                        <input v-model="form.telefono" id="telefono" type="number"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300" />
+                    </div>
                     <div class="flex justify-end">
                         <button type="submit"
                             class="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700">Guardar</button>
@@ -101,17 +104,13 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import * as XLSX from 'xlsx';
 
-const props = defineProps({
-    precios: Array,
-    productos: Array ,
-    lugar_id: Number
-});
-console.log(props.productos)
+const props = defineProps({ clientes: Array });
+
 const form = useForm({
     id: '',
-    producto_id: '',
-    precio: '',
-    lugar_id: props.lugar_id // Asignar el valor de lugar_id
+    Dni: '',
+    Nombre: '',
+    telefono: ''
 });
 
 const showmodalform = ref(false);
@@ -120,29 +119,29 @@ const operation = ref(1);
 const msj = ref('');
 const clasMsj = ref('hidden');
 
-const openModalform = (op, precio = null) => {
+const openModalform = (op, cliente = null) => {
     showmodalform.value = true;
     operation.value = op;
     if (op === 1) {
-        title.value = "Registrar Precio";
+        title.value = "Registrar Cliente";
         form.reset();
     } else {
-        title.value = "Actualizar Precio";
-        form.id = precio.id;
-        form.producto_id = precio.producto_id;
-        form.precio = precio.precio;
-        form.lugar_id = precio.lugar_id;
+        title.value = "Actualizar Cliente";
+        form.id = cliente.id;
+        form.Dni = cliente.Dni;
+        form.Nombre = cliente.Nombre;
+        form.telefono = cliente.telefono;
     }
 };
 
 const delet = (id) => {
-    if (confirm('¿Estás seguro de que deseas eliminar este precio?')) {
-        form.delete(route('precios.destroy', id), {
+    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+        form.delete(route('clientes.destroy', id), {
             onSuccess: () => {
-                ok("Precio Eliminado");
+                ok("Cliente Eliminado");
             },
             onError: (errors) => {
-                console.error('Error al eliminar el precio:', errors);
+                console.error('Error al eliminar el cliente:', errors);
             }
         });
     }
@@ -154,22 +153,22 @@ const closeModalForm = () => {
 };
 
 const save = () => {
-    if (operation.value == 1) {
-        form.post(route('precios.store'), {
+    if (operation.value === 1) {
+        form.post(route('clientes.store'), {
             onSuccess: () => {
-                ok("Precio Creado");
+                ok("Cliente Creado");
             },
             onError: (errors) => {
-                console.error('Error al crear el precio:', errors);
+                console.error('Error al crear el cliente:', errors);
             }
         });
     } else {
-        form.put(route('precios.update', form.id), {
+        form.put(route('clientes.update', form.id), {
             onSuccess: () => {
-                ok("Precio Actualizado");
+                ok("Cliente Actualizado");
             },
             onError: (errors) => {
-                console.error('Error al actualizar el precio:', errors);
+                console.error('Error al actualizar el cliente:', errors);
             }
         });
     }
@@ -188,39 +187,32 @@ const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchQuery = ref('');
 
-const filteredPrecios = computed(() => {
-    return props.precios.filter(precio =>
-        precio.producto.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        precio.lugar.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+const filteredClientes = computed(() => {
+    return props.clientes.filter(cliente => {
+        return (
+            cliente.Dni.toString().includes(searchQuery.value) ||
+            cliente.Nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+    });
 });
 
-const paginatedPrecios = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return filteredPrecios.value.slice(start, end);
+const paginatedClientes = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage;
+    return filteredClientes.value.slice(startIndex, startIndex + itemsPerPage);
 });
 
 const prevPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--;
-    }
+    if (currentPage.value > 1) currentPage.value--;
 };
 
 const nextPage = () => {
-    if (currentPage.value * itemsPerPage < filteredPrecios.value.length) {
-        currentPage.value++;
-    }
+    if (currentPage.value * itemsPerPage < filteredClientes.value.length) currentPage.value++;
 };
 
 const downloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(props.precios.map(precio => ({
-        Producto: precio.producto.descripcion,
-        Precio: precio.precio,
-        Lugar: precio.lugar.descripcion
-    })));
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Precios');
-    XLSX.writeFile(wb, 'precios.xlsx');
+    const worksheet = XLSX.utils.json_to_sheet(props.clientes);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes');
+    XLSX.writeFile(workbook, 'clientes.xlsx');
 };
 </script>

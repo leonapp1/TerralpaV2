@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\DetallesPagosController;
 use App\Http\Controllers\LugaresController;
+use App\Http\Controllers\ObservacionesController;
 use App\Http\Controllers\PreciosController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -8,6 +11,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductosController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,15 +49,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
 
-    Route::resource('/productos', ProductosController::class,);
+    Route::resource('/productos', ProductosController::class);
     Route::post('/productos', [ProductosController::class, 'store'])->name('productos.store');
     Route::post('/productos/{id}', [ProductosController::class, 'update'])->name('productos.update');
 
-    Route::resource('lugares', LugaresController::class,);
+    Route::resource('lugares', LugaresController::class);
     Route::post('/lugares', [LugaresController::class, 'store'])->name('lugares.store');
     Route::post('/lugares/{id}', [LugaresController::class, 'update'])->name('lugares.update');
 
-    Route::resource('precios', PreciosController::class,);
+    Route::resource('precios', PreciosController::class);
+    Route::resource('observaciones', ObservacionesController::class);
+    Route::resource('clientes', ClientesController::class);
+    Route::resource('detalles_pagos', DetallesPagosController::class);
 
 
 

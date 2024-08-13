@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clientes;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClientesController extends Controller
 {
@@ -12,7 +13,10 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        //
+        $clientes = Clientes::all();
+        return Inertia::render('Clientes/Index', [
+            'clientes' => $clientes,
+        ]);
     }
 
     /**
@@ -20,7 +24,7 @@ class ClientesController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Clientes/Create');
     }
 
     /**
@@ -28,38 +32,61 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      
+        $validated = $request->validate([
+            'Dni' => 'required',
+            'Nombre' => 'required',
+            'telefono' => 'required',
+        ]);
+
+        Clientes::create($request->all());
+
+        return redirect()->route('clientes.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Clientes $clientes)
+    public function show(Clientes $cliente)
     {
-        //
+        return Inertia::render('Clientes/Show', [
+            'cliente' => $cliente,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Clientes $clientes)
+    public function edit(Clientes $cliente)
     {
-        //
+        return Inertia::render('Clientes/Edit', [
+            'cliente' => $cliente,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Clientes $clientes)
+    public function update(Request $request, Clientes $cliente)
     {
-        //
+        $validated = $request->validate([
+            'Dni' => 'required',
+            'Nombre' => 'required',
+            'telefono' => 'required',
+        ]);
+
+        $cliente->update($validated);
+
+        return redirect()->route('clientes.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Clientes $clientes)
+    public function destroy(Clientes $cliente)
     {
-        //
+        $cliente->delete();
+
+        return redirect()->route('clientes.index');
     }
 }

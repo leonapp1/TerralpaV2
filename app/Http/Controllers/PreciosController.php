@@ -8,6 +8,8 @@ use App\Models\Productos;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+use function Laravel\Prompts\error;
+
 class PreciosController extends Controller
 {
     /**
@@ -15,11 +17,7 @@ class PreciosController extends Controller
      */
     public function index()
     {
-        $precio = Precios::with('producto')->get();
-             
-        return Inertia::render('Precios/Index', [
-            'precios' => $precio,
-        ]);
+        abort(404);
 
     }
 
@@ -72,17 +70,29 @@ class PreciosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Precios $precios)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData =   $request->validate([
+            'lugar_id' => 'required',
+            'producto_id' => 'required',
+            'precio' => 'required|numeric|min:0',
+        ]);
+        $precio = Precios::findOrFail($id);
+
+        $precio->update($validatedData);
+
+        return redirect()->route('precios.show',$request->lugar_id)->with('message', 'Precios Guardado con exito');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Precios $precios)
+    public function destroy(Request $request,$id )
     {
-        //
+        $precio = Precios::findOrFail($id);
+        $precio->delete();
+
+        return redirect()->route('precios.show',$request->lugar_id)->with('message', 'Precios Guardado con exito');
     }
 
     public function updateMassive(Request $request)

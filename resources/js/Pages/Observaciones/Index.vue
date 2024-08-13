@@ -1,5 +1,5 @@
 <template>
-    <Head title="Precios" />
+    <Head title="Detalles" />
     <AuthenticatedLayout>
         <div class="w-full px-4">
             <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white rounded shadow-lg xl:mb-0">
@@ -30,21 +30,19 @@
                         <table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-md">
                             <thead>
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-gray-500">Producto</th>
-                                    <th class="px-4 py-2 text-left text-gray-500">Precio</th>
-                               
+                                    <th class="px-4 py-2 text-left text-gray-500">Código</th>
+                                    <th class="px-4 py-2 text-left text-gray-500">Observaciones</th>
                                     <th class="px-4 py-2 text-left text-gray-500">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(precio, index) in paginatedPrecios" :key="precio.id">
-                                    <td class="px-4 py-2">{{ precio.producto.descripcion }}</td>
-                                    <td class="px-4 py-2">{{ precio.precio }}</td>
-                                   
+                                <tr v-for="(observaciones, index) in paginatedDetalles" :key="observaciones.id">
+                                    <td class="px-4 py-2">{{ observaciones.codigo }}</td>
+                                    <td class="px-4 py-2">{{ observaciones.observaciones }}</td>
                                     <td class="px-4 py-2 flex gap-2">
-                                        <button @click="openModalform(2, precio)"
+                                        <button @click="openModalform(2, observaciones)"
                                             class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Editar</button>
-                                        <button @click="delet(precio.id)"
+                                        <button @click="delet(observaciones.id)"
                                             class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Eliminar</button>
                                     </td>
                                 </tr>
@@ -70,21 +68,17 @@
                 </div>
                 <form @submit.prevent="save">
                     <div class="mb-4">
-                        <label for="producto_id" class="block mb-2 text-sm font-medium text-gray-700">Producto</label>
-                        <select v-model="form.producto_id" id="producto_id"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300">
-                            <option v-for="producto in productos" :key="producto.id" :value="producto.id">
-                                {{ producto.descripcion }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="precio" class="block mb-2 text-sm font-medium text-gray-700">Precio</label>
-                        <input v-model="form.precio" id="precio" type="text"
+                        <label for="codigo" class="block mb-2 text-sm font-medium text-gray-700">Código</label>
+                        <input v-model="form.codigo" id="codigo" type="text"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300"
                             required />
                     </div>
-                   
+                    <div class="mb-4">
+                        <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-700">Observaciones</label>
+                        <input v-model="form.observaciones" id="observaciones" type="text"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                            required />
+                    </div>
                     <div class="flex justify-end">
                         <button type="submit"
                             class="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700">Guardar</button>
@@ -102,16 +96,13 @@ import { ref, computed } from 'vue';
 import * as XLSX from 'xlsx';
 
 const props = defineProps({
-    precios: Array,
-    productos: Array ,
-    lugar_id: Number
+    observaciones: Object
 });
-console.log(props.productos)
+
 const form = useForm({
     id: '',
-    producto_id: '',
-    precio: '',
-    lugar_id: props.lugar_id // Asignar el valor de lugar_id
+    codigo: '',
+    observaciones: ''
 });
 
 const showmodalform = ref(false);
@@ -120,29 +111,28 @@ const operation = ref(1);
 const msj = ref('');
 const clasMsj = ref('hidden');
 
-const openModalform = (op, precio = null) => {
+const openModalform = (op, observaciones = null) => {
     showmodalform.value = true;
     operation.value = op;
     if (op === 1) {
-        title.value = "Registrar Precio";
+        title.value = "Registrar Detalle";
         form.reset();
     } else {
-        title.value = "Actualizar Precio";
-        form.id = precio.id;
-        form.producto_id = precio.producto_id;
-        form.precio = precio.precio;
-        form.lugar_id = precio.lugar_id;
+        title.value = "Actualizar Detalle";
+        form.id = observaciones.id;
+        form.codigo = observaciones.codigo;
+        form.observaciones = observaciones.observaciones;
     }
 };
 
 const delet = (id) => {
-    if (confirm('¿Estás seguro de que deseas eliminar este precio?')) {
-        form.delete(route('precios.destroy', id), {
+    if (confirm('¿Estás seguro de que deseas eliminar este observaciones?')) {
+        form.delete(route('observaciones.destroy', id), {
             onSuccess: () => {
-                ok("Precio Eliminado");
+                ok("Detalle Eliminado");
             },
             onError: (errors) => {
-                console.error('Error al eliminar el precio:', errors);
+                console.error('Error al eliminar el observaciones:', errors);
             }
         });
     }
@@ -155,21 +145,21 @@ const closeModalForm = () => {
 
 const save = () => {
     if (operation.value == 1) {
-        form.post(route('precios.store'), {
+        form.post(route('observaciones.store'), {
             onSuccess: () => {
-                ok("Precio Creado");
+                ok("Detalle Creado");
             },
             onError: (errors) => {
-                console.error('Error al crear el precio:', errors);
+                console.error('Error al crear el observaciones:', errors);
             }
         });
     } else {
-        form.put(route('precios.update', form.id), {
+        form.put(route('observaciones.update', form.id), {
             onSuccess: () => {
-                ok("Precio Actualizado");
+                ok("Detalle Actualizado");
             },
             onError: (errors) => {
-                console.error('Error al actualizar el precio:', errors);
+                console.error('Error al actualizar el observaciones:', errors);
             }
         });
     }
@@ -188,17 +178,17 @@ const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchQuery = ref('');
 
-const filteredPrecios = computed(() => {
-    return props.precios.filter(precio =>
-        precio.producto.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        precio.lugar.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase())
+const filteredDetalles = computed(() => {
+    return props.observaciones.filter(observacion =>
+        observacion.codigo.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        observacion.observaciones.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
 });
 
-const paginatedPrecios = computed(() => {
+const paginatedDetalles = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return filteredPrecios.value.slice(start, end);
+    return filteredDetalles.value.slice(start, end);
 });
 
 const prevPage = () => {
@@ -208,19 +198,18 @@ const prevPage = () => {
 };
 
 const nextPage = () => {
-    if (currentPage.value * itemsPerPage < filteredPrecios.value.length) {
+    if (currentPage.value * itemsPerPage < filteredDetalles.value.length) {
         currentPage.value++;
     }
 };
 
 const downloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(props.precios.map(precio => ({
-        Producto: precio.producto.descripcion,
-        Precio: precio.precio,
-        Lugar: precio.lugar.descripcion
+    const ws = XLSX.utils.json_to_sheet(props.observaciones.map(observaciones => ({
+        Código: observaciones.codigo,
+        Observaciones: observaciones.observaciones
     })));
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Precios');
-    XLSX.writeFile(wb, 'precios.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Detalles');
+    XLSX.writeFile(wb, 'observaciones.xlsx');
 };
 </script>
