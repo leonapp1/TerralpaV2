@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\DetallesPagosController;
+use App\Http\Controllers\ProformasController;
 use App\Http\Controllers\LugaresController;
 use App\Http\Controllers\ObservacionesController;
 use App\Http\Controllers\PreciosController;
@@ -11,7 +12,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductosController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('observaciones', ObservacionesController::class);
     Route::resource('clientes', ClientesController::class);
     Route::resource('detalles_pagos', DetallesPagosController::class);
+
+    Route::resource('proformas',ProformasController::class);
 
 
 

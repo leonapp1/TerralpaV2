@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Proformas;
+use App\Models\detalles_proforma;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class ProformasController extends Controller
+class DetallesProformaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $proformas = Proformas::all(); // Puedes ajustar la consulta según sea necesario
-
-        return Inertia::render('Proformas/Index', [
-            'proformas' => $proformas,
-        ]);
+        //
     }
 
     /**
@@ -39,7 +34,7 @@ class ProformasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proformas $proformas)
+    public function show(detalles_proforma $detalles_proforma)
     {
         //
     }
@@ -47,7 +42,7 @@ class ProformasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proformas $proformas)
+    public function edit(detalles_proforma $detalles_proforma)
     {
         //
     }
@@ -55,7 +50,7 @@ class ProformasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proformas $proformas)
+    public function update(Request $request, detalles_proforma $detalles_proforma)
     {
         //
     }
@@ -63,7 +58,7 @@ class ProformasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Proformas $proformas)
+    public function destroy(detalles_proforma $detalles_proforma)
     {
         //
     }
