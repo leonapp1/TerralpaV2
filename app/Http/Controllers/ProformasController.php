@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clientes;
+use App\Models\Lugares;
+use App\Models\Productos;
 use App\Models\Proformas;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,9 +17,14 @@ class ProformasController extends Controller
     public function index()
     {
         $proformas = Proformas::all(); // Puedes ajustar la consulta según sea necesario
-
+        $productos = Productos::with('precios')->get();
+        $clientes = Clientes::all();
+        $lugares = Lugares::all();
         return Inertia::render('Proformas/Index', [
             'proformas' => $proformas,
+            'productos' => $productos,
+            'clientes' => $clientes,
+            'lugares' => $lugares
         ]);
     }
 

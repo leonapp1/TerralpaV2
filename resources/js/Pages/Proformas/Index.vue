@@ -7,8 +7,20 @@
             <div class="relative flex flex-col min-w-0 break-words bg-white rounded-lg shadow-lg">
                 <div class="flex-auto p-6">
                     <div>
-                        <!-- CSRF Token para seguridad (si estás usando Laravel u otro framework similar) -->
-                        <!-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> -->
+
+                        <v-select class="v-selct" label="descripcion" :options="lugares" placeholder="Selecciona Lugar"
+                            :reduce="lugar => lugar.id" @update:modelValue="(value) => updateProductlugar(value)" v-model="selectlugarid">
+                            <template #option="props" >
+                                <div>
+                                    {{ props.descripcion }}
+                                </div>
+                            </template>
+                            <template #selected-option="props">
+                                <div>
+                                    {{ props.descripcion }}
+                                </div>
+                            </template>
+                        </v-select>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="fechaInicial" class="block text-gray-700 text-sm font-semibold mb-2">Fecha
@@ -30,13 +42,25 @@
                             <div>
                                 <label for="idcliente" class="block text-gray-700 text-sm font-semibold mb-2">ID
                                     Cliente:</label>
-                                <input v-model.number="form_cot.idcliente" type="number" id="idcliente" name="idcliente"
+                                <v-select class="v-selct" label="nombre" :options="clientes"
+                                    placeholder="Selecciona Producto" :reduce="cliente => cliente.id"
+                                    v-model="form_cot.idcliente">
+                                    <template #option="props">
+                                        <div>
+                                            {{ props.dni }} - {{ props.nombre }} {{ props.apellido }}
+                                        </div>
+                                    </template>
+                                    <template #selected-option="props">
+                                        <div>
+                                            {{ props.dni }} - {{ props.nombre }} {{ props.apellido }}
+                                        </div>
+                                    </template>
+                                </v-select>
+                                <!--  <input v-model.number="form_cot.idcliente" type="number" id="idcliente" name="idcliente"
                                     class="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    required>
+                                    required> -->
                             </div>
                         </div>
-
-
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -72,21 +96,36 @@
                             </div>
                         </div>
 
-                        <div class="flex gap-4">
+                        <div class="flex flex-col gap-4">
                             <!-- CSRF Token para seguridad (si estás usando Laravel u otro framework similar) -->
                             <!-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> -->
 
                             <!-- Campos Dinámicos -->
-                            <div v-for="(item, index) in form.items" :key="index" class="border p-4 rounded-md mb-4">
-                                <h3 class="text-lg font-semibold mb-2">Detalle {{ index + 1 }}</h3>
+                            <div v-for="(item, index) in formproducto.items" :key="index"
+                                class="border p-4 rounded-md mb-4 bg-slate-200">
+                                <h3 class="text-lg font-semibold mb-2">Detalle del producto {{ index + 1 }}</h3>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label :for="'codigo_' + index"
                                             class="block text-gray-700 text-sm font-semibold mb-2">Código:</label>
-                                        <input v-model="item.codigo" :id="'codigo_' + index" type="text" name="codigo"
-                                            class="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            required>
+
+                                        <v-select
+                                            class="v-selct form-input  block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            label="nombre" :options="productos" placeholder="Selecciona Producto"
+                                            :reduce="descripcion => descripcion.id" v-model="item.codigo"
+                                            @update:modelValue="(value) => updateProductDetails(value, index)">
+                                            <template #option="props">
+                                                <div>
+                                                    {{ props.codigo }} - {{ props.descripcion }}
+                                                </div>
+                                            </template>
+                                            <template #selected-option="props">
+                                                <div>
+                                                    {{ props.codigo }} - {{ props.descripcion }}
+                                                </div>
+                                            </template>
+                                        </v-select>
                                     </div>
                                     <div>
                                         <label :for="'descripcion_' + index"
@@ -159,22 +198,22 @@
                                     </div>
                                 </div>
 
-                                <button @click="removeItem(index)" type="button"
+                                <button @click="removeItemproducto(index)" type="button"
                                     class="bg-red-600 text-white py-1 px-2 rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
                                     Eliminar Detalle
                                 </button>
                             </div>
 
-                            <button @click="addItem" type="button"
-                            class="w-full bg-green-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            Agregar Otro Detalle
-                        </button>
-                        <button type="submit"
-                            class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Enviar
-                            Cotización</button>
-
+                            <button @click="addItemproduco" type="button"
+                                class="bg-green-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 w-1/4">
+                                + Agregar Detalle
+                            </button>
+                            <button type="submit" @click="submitForm"
+                                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Enviar
+                                Cotización
+                            </button>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -186,7 +225,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
-
+import { errorMessages } from 'vue/compiler-sfc';
+const props = defineProps({ productos: Array, clientes: Array, lugares: Array });
+console.log(props.productos);
 const form_cot = ref({
     idusuario: '',
     idcliente: '',
@@ -199,9 +240,13 @@ const form_cot = ref({
     estado: '',
     pagos: 0,
     subtotal: 0,
-    descuento: 0
+    descuento: 0,
+    detallesproducto: ''
 });
-const form = ref({
+
+const selectlugarid = ref(2);
+
+const formproducto = ref({
     items: [{
         codigo: '',
         descripcion: '',
@@ -220,14 +265,16 @@ const submitForm = async () => {
         // Aquí puedes manejar el envío del formulario, por ejemplo, utilizando axios o fetch
         // const response = await axios.post('/submit', form.value);
         // console.log(response.data);
-        console.log('Formulario enviado:', form.value);
+        form_cot.value.detallesproducto = formproducto.value.items;
+        /* console.log('Formulario enviado:', form_cot.value); */
+
     } catch (error) {
         console.error('Error al enviar el formulario:', error);
     }
 };
-// Función para añadir un nuevo detalle
-const addItem = () => {
-    form.value.items.push({
+// Función para añadir un nuevo detalle producto
+const addItemproduco = () => {
+    formproducto.value.items.push({
         codigo: '',
         descripcion: '',
         cantidad_producto: 0,
@@ -239,10 +286,38 @@ const addItem = () => {
     });
 };
 
-// Función para eliminar un detalle existente
-const removeItem = (index) => {
-    form.value.items.splice(index, 1);
+// Función para eliminar un detalle producto existente 
+const removeItemproducto = (index) => {
+    formproducto.value.items.splice(index, 1);
 };
+
+const updateProductlugar = (lugarId) => {
+    selectlugarid.value = props.productos.find(product => product.id === 1);
+
+   
+        console.log(selectlugarid.value);
+}
+const updateProductDetails = (productId, index) => {
+    
+    
+    const selectedProduct = props.productos.find(product => product.id === productId);
+    console.log(selectedProduct);
+
+    const selectedPrecio=selectedProduct.precios.find(precios => precios.id===selectlugarid.value);
+    console.log(selectedPrecio);
+    if (selectedProduct) {
+        formproducto.value.items[index] = {
+            ...formproducto.value.items[index],
+            descripcion: selectedProduct.descripcion,
+            unidad_medida: selectedProduct.Unid,
+            equivale: selectedProduct.cantidad_producto,
+            precio_unitario: 0, // Si el precio unitario no se encuentra en el objeto de producto, ajusta según sea necesario
+            subtotal: 0, // Ajusta si es necesario
+            peso: selectedProduct.peso,
+        };
+    }
+};
+
 </script>
 
 <style scoped>

@@ -11,6 +11,7 @@ class Lugares extends Model
     protected $fillable = ['descripcion','img','direccion'];
     public function precios()
     {
-        return $this->hasMany(Precios::class)->withPivot('precio');;
+        return $this->hasMany(Precios::class,'lugar_id');
+
     }
 }

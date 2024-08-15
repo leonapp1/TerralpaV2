@@ -40,8 +40,8 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(cliente, index) in paginatedClientes" :key="cliente.id">
-                                    <td class="px-4 py-2">{{ cliente.Dni }}</td>
-                                    <td class="px-4 py-2">{{ cliente.Nombre }}</td>
+                                    <td class="px-4 py-2">{{ cliente.dni }}</td>
+                                    <td class="px-4 py-2">{{ cliente.nombre }}</td>
                                     <td class="px-4 py-2">{{ cliente.telefono }}</td>
                                     <td class="px-4 py-2 flex gap-2">
                                         <button @click="openModalform(2, cliente)"
@@ -75,12 +75,12 @@
                 <form @submit.prevent="save">
                     <div class="mb-4">
                         <label for="Dni" class="block mb-2 text-sm font-medium text-gray-700">DNI</label>
-                        <input v-model="form.Dni" id="Dni" type="number"
+                        <input v-model="form.dni" id="Dni" type="number"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300" />
                     </div>
                     <div class="mb-4">
                         <label for="Nombre" class="block mb-2 text-sm font-medium text-gray-700">Nombre</label>
-                        <textarea v-model="form.Nombre" id="Nombre"
+                        <textarea v-model="form.nombre" id="Nombre"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-300"></textarea>
                     </div>
                     <div class="mb-4">
@@ -108,8 +108,8 @@ const props = defineProps({ clientes: Array });
 
 const form = useForm({
     id: '',
-    Dni: '',
-    Nombre: '',
+    dni: '',
+    nombre: '',
     telefono: ''
 });
 
@@ -128,8 +128,8 @@ const openModalform = (op, cliente = null) => {
     } else {
         title.value = "Actualizar Cliente";
         form.id = cliente.id;
-        form.Dni = cliente.Dni;
-        form.Nombre = cliente.Nombre;
+        form.dni = cliente.dni;
+        form.nombre = cliente.nombre;
         form.telefono = cliente.telefono;
     }
 };
@@ -190,8 +190,8 @@ const searchQuery = ref('');
 const filteredClientes = computed(() => {
     return props.clientes.filter(cliente => {
         return (
-            cliente.Dni.toString().includes(searchQuery.value) ||
-            cliente.Nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+            cliente.dni.toString().includes(searchQuery.value) ||
+            cliente.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
         );
     });
 });

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('Clientes', function (Blueprint $table) {
             $table->id(); // Crea una columna de ID auto-incremental
-            $table->integer('Dni'); 
-            $table->text('Nombre'); 
+            $table->integer('dni'); 
+            $table->text('nombre'); 
             $table->integer('telefono'); 
 
             $table->timestamps(); // Crea columnas 'created_at' y 'updated_at'

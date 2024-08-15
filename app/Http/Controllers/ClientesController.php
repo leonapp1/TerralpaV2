@@ -34,8 +34,8 @@ class ClientesController extends Controller
     {
       
         $validated = $request->validate([
-            'Dni' => 'required',
-            'Nombre' => 'required',
+            'dni' => 'required',
+            'nombre' => 'required',
             'telefono' => 'required',
         ]);
 
@@ -70,8 +70,8 @@ class ClientesController extends Controller
     public function update(Request $request, Clientes $cliente)
     {
         $validated = $request->validate([
-            'Dni' => 'required',
-            'Nombre' => 'required',
+            'dni' => 'required',
+            'nombre' => 'required',
             'telefono' => 'required',
         ]);
 
